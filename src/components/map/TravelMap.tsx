@@ -1,10 +1,24 @@
-import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import { useEffect } from 'react';
+import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
 import { LatLng } from 'leaflet';
 import { Place, Travel } from '../../types';
 import { MapClickHandler } from './MapClickHandler';
 import { Badge } from '../ui/Badge';
-import { Button } from '../ui/Button';
 import { ExternalLink, Trash2 } from 'lucide-react';
+
+function MapInvalidator({ centerLat, centerLng }: { centerLat: number; centerLng: number }) {
+  const map = useMap();
+  useEffect(() => {
+    // Force Leaflet to recalculate its size after the container renders
+    setTimeout(() => {
+      map.invalidateSize();
+      if (centerLat !== 0 || centerLng !== 0) {
+        map.setView([centerLat, centerLng], map.getZoom());
+      }
+    }, 100);
+  }, [map, centerLat, centerLng]);
+  return null;
+}
 
 const sourceColors: Record<Place['source'], string> = {
   instagram: '#f472b6',
@@ -48,6 +62,7 @@ export function TravelMap({
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <MapInvalidator centerLat={travel.centerLat} centerLng={travel.centerLng} />
         <MapClickHandler active={addMode} onMapClick={onMapClick} />
         {places.map((place) => (
           <CircleMarker
