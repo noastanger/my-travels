@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* Leaflet popup override to match dark theme */
+.leaflet-popup-content-wrapper {
+  background: #1e293b;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.leaflet-popup-tip {
+  background: #1e293b;
+}
+
+.leaflet-popup-close-button {
+  color: #94a3b8 !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: white !important;
+}
+
+/* Hide default attribution in a less intrusive way */
+.leaflet-control-attribution {
+  font-size: 10px;
+  opacity: 0.6;
+}
