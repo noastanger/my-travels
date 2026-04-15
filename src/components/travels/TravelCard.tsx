@@ -11,7 +11,7 @@ interface TravelCardProps {
 
 export function TravelCard({ travel }: TravelCardProps) {
   const navigate = useNavigate();
-  const placeCount = usePlacesStore((s) => s.getPlacesForTravel(travel.id).length);
+  const placeCount = usePlacesStore((s) => s.places.filter((p) => p.travelId === travel.id).length);
   const removeTravel = useTravelsStore((s) => s.removeTravel);
 
   function handleDelete(e: React.MouseEvent) {

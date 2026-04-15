@@ -15,7 +15,8 @@ export function TravelDetailPage() {
   const navigate = useNavigate();
 
   const travel = useTravelsStore((s) => s.travels.find((t) => t.id === id));
-  const places = usePlacesStore((s) => s.getPlacesForTravel(id ?? ''));
+  const allPlaces = usePlacesStore((s) => s.places);
+  const places = allPlaces.filter((p) => p.travelId === id);
   const addPlace = usePlacesStore((s) => s.addPlace);
   const removePlace = usePlacesStore((s) => s.removePlace);
 
