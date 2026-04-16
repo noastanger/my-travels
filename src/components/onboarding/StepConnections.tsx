@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Check, Link } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { SocialPlatform, ConnectedAccount } from '../../store/useProfileStore';
 import { InstagramIcon, TikTokIcon, FacebookIcon, GoogleMapsIcon } from './SocialIcons';
+import { ConnectModal } from './ConnectModal';
 
 interface PlatformConfig {
   platform: SocialPlatform;
@@ -50,18 +51,17 @@ interface StepConnectionsProps {
 }
 
 export function StepConnections({ connections, onToggle, onFinish }: StepConnectionsProps) {
-  const [connecting, setConnecting] = useState<SocialPlatform | null>(null);
-
-  function handleConnect(platform: SocialPlatform) {
-    setConnecting(platform);
-    // Simulate a brief "connecting" state before toggling
-    setTimeout(() => {
-      onToggle(platform);
-      setConnecting(null);
-    }, 800);
-  }
+  const [activePlatform, setActivePlatform] = useState<SocialPlatform | null>(null);
 
   const connectedCount = connections.filter((c) => c.connected).length;
+
+  function handleConnected(platform: SocialPlatform) {
+    onToggle(platform);
+  }
+
+  function handleDisconnect(platform: SocialPlatform) {
+    onToggle(platform);
+  }
 
   return (
     <div className="w-full space-y-4">
@@ -69,7 +69,6 @@ export function StepConnections({ connections, onToggle, onFinish }: StepConnect
         {PLATFORMS.map(({ platform, label, description, color, icon: Icon }) => {
           const account = connections.find((c) => c.platform === platform);
           const isConnected = account?.connected ?? false;
-          const isConnecting = connecting === platform;
 
           return (
             <div
@@ -90,7 +89,7 @@ export function StepConnections({ connections, onToggle, onFinish }: StepConnect
               <div className="shrink-0">
                 {isConnected ? (
                   <button
-                    onClick={() => onToggle(platform)}
+                    onClick={() => handleDisconnect(platform)}
                     className="flex items-center gap-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 px-3 py-1.5 text-xs font-medium text-emerald-400 hover:bg-red-500/20 hover:border-red-500/40 hover:text-red-400 transition-colors cursor-pointer group"
                   >
                     <Check size={12} className="group-hover:hidden" />
@@ -99,24 +98,10 @@ export function StepConnections({ connections, onToggle, onFinish }: StepConnect
                   </button>
                 ) : (
                   <button
-                    onClick={() => handleConnect(platform)}
-                    disabled={isConnecting}
-                    className="flex items-center gap-1.5 rounded-full bg-white/10 border border-white/20 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/20 transition-colors cursor-pointer disabled:opacity-50"
+                    onClick={() => setActivePlatform(platform)}
+                    className="flex items-center gap-1.5 rounded-full bg-white/10 border border-white/20 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/20 transition-colors cursor-pointer"
                   >
-                    {isConnecting ? (
-                      <>
-                        <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                        </svg>
-                        Connecting…
-                      </>
-                    ) : (
-                      <>
-                        <Link size={12} />
-                        Connect
-                      </>
-                    )}
+                    Connect
                   </button>
                 )}
               </div>
@@ -137,6 +122,16 @@ export function StepConnections({ connections, onToggle, onFinish }: StepConnect
           </p>
         )}
       </div>
+
+      {/* Connect modal — opens for whichever platform was clicked */}
+      {activePlatform && (
+        <ConnectModal
+          platform={activePlatform}
+          open={true}
+          onClose={() => setActivePlatform(null)}
+          onConnected={handleConnected}
+        />
+      )}
     </div>
   );
 }
