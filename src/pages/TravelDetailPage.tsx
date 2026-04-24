@@ -21,6 +21,10 @@ export function TravelDetailPage() {
   const removePlace = usePlacesStore((s) => s.removePlace);
 
   const [addMode, setAddMode] = useState(false);
+
+  function handleImport() {
+    navigate(`/import?travelId=${id}`);
+  }
   const [pendingLatLng, setPendingLatLng] = useState<LatLng | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
@@ -100,6 +104,7 @@ export function TravelDetailPage() {
             onToggleAddMode={() => setAddMode((v) => !v)}
             onSelectPlace={setSelectedPlaceId}
             onRemovePlace={removePlace}
+            onImport={handleImport}
           />
         </div>
       </div>

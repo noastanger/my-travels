@@ -5,7 +5,7 @@ import { TravelCard } from '../components/travels/TravelCard';
 import { AddTravelModal } from '../components/travels/AddTravelModal';
 import { EmptyState } from '../components/ui/EmptyState';
 import { Button } from '../components/ui/Button';
-import { Plus, Settings } from 'lucide-react';
+import { Plus, Settings, Link2 } from 'lucide-react';
 
 export function HomePage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -28,6 +28,13 @@ export function HomePage() {
               title="Settings"
             >
               <Settings size={18} />
+            </button>
+            <button
+              onClick={() => navigate('/import')}
+              className="flex items-center justify-center rounded-lg p-2 text-slate-400 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+              title="Import from link"
+            >
+              <Link2 size={18} />
             </button>
             <Button onClick={() => setModalOpen(true)}>
               <Plus size={16} />

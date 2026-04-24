@@ -6,6 +6,7 @@ export interface ConnectedAccount {
   platform: SocialPlatform;
   connected: boolean;
   handle?: string;
+  accessToken?: string;
 }
 
 export interface UserProfile {
@@ -40,7 +41,8 @@ function save(profile: UserProfile) {
 interface ProfileStore {
   profile: UserProfile | null;
   setProfile: (data: Pick<UserProfile, 'email' | 'username'>) => void;
-  toggleConnection: (platform: SocialPlatform, handle?: string) => void;
+  toggleConnection: (platform: SocialPlatform, handle?: string, accessToken?: string) => void;
+  getToken: (platform: SocialPlatform) => string | undefined;
   completeOnboarding: () => void;
   resetOnboarding: () => void;
 }
@@ -60,17 +62,26 @@ export const useProfileStore = create<ProfileStore>((set, get) => ({
     set({ profile });
   },
 
-  toggleConnection(platform, handle) {
+  toggleConnection(platform, handle, accessToken) {
     const existing = get().profile;
     if (!existing) return;
     const connections = existing.connections.map((c) =>
       c.platform === platform
-        ? { ...c, connected: !c.connected, handle: !c.connected ? handle : undefined }
+        ? {
+            ...c,
+            connected: !c.connected,
+            handle: !c.connected ? handle : undefined,
+            accessToken: !c.connected ? accessToken : undefined,
+          }
         : c
     );
     const profile = { ...existing, connections };
     save(profile);
     set({ profile });
+  },
+
+  getToken(platform) {
+    return get().profile?.connections.find((c) => c.platform === platform)?.accessToken;
   },
 
   completeOnboarding() {

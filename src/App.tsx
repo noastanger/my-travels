@@ -4,6 +4,7 @@ import { TravelDetailPage } from './pages/TravelDetailPage';
 import { OnboardingPage } from './pages/OnboardingPage';
 import { OAuthCallbackPage } from './pages/OAuthCallbackPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { ImportPage } from './pages/ImportPage';
 import { useProfileStore } from './store/useProfileStore';
 
 function AppRoutes() {
@@ -24,6 +25,7 @@ function AppRoutes() {
           <Route path="/" element={<HomePage />} />
           <Route path="/travels/:id" element={<TravelDetailPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/import" element={<ImportPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </>
       )}
