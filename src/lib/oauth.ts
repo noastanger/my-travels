@@ -49,11 +49,13 @@ export const OAUTH_CONFIGS: Record<SocialPlatform, OAuthConfig> = {
   instagram: {
     platform: 'instagram',
     label: 'Instagram',
-    authUrl: 'https://api.instagram.com/oauth/authorize',
+    // Instagram Basic Display is deprecated — auth now goes through Facebook Login
+    authUrl: 'https://www.facebook.com/v19.0/dialog/oauth',
     clientId: import.meta.env.VITE_INSTAGRAM_APP_ID ?? '',
-    scope: 'instagram_business_basic',
+    scope: 'public_profile,email',
     usePKCE: false,
     responseType: 'code',
+    extraParams: { display: 'popup' },
   },
   tiktok: {
     platform: 'tiktok',
