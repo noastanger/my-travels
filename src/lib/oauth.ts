@@ -49,12 +49,13 @@ export const OAUTH_CONFIGS: Record<SocialPlatform, OAuthConfig> = {
   instagram: {
     platform: 'instagram',
     label: 'Instagram',
-    // Instagram Basic Display is deprecated — auth now goes through Facebook Login
+    // Instagram Basic Display is deprecated — auth now goes through Facebook Login.
+    // Using token (implicit) flow so we get the access token client-side.
     authUrl: 'https://www.facebook.com/v19.0/dialog/oauth',
     clientId: import.meta.env.VITE_INSTAGRAM_APP_ID ?? '',
-    scope: 'public_profile,email',
+    scope: 'public_profile,email,pages_show_list,instagram_basic',
     usePKCE: false,
-    responseType: 'code',
+    responseType: 'token',
     extraParams: { display: 'popup' },
   },
   tiktok: {
