@@ -1,14 +1,16 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTravelsStore } from '../store/useTravelsStore';
 import { TravelCard } from '../components/travels/TravelCard';
 import { AddTravelModal } from '../components/travels/AddTravelModal';
 import { EmptyState } from '../components/ui/EmptyState';
 import { Button } from '../components/ui/Button';
-import { Plus } from 'lucide-react';
+import { Plus, Settings } from 'lucide-react';
 
 export function HomePage() {
   const [modalOpen, setModalOpen] = useState(false);
   const travels = useTravelsStore((s) => s.travels);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -19,10 +21,19 @@ export function HomePage() {
             <span className="text-2xl">🌍</span>
             <span className="text-lg font-bold text-white">My Travels</span>
           </div>
-          <Button onClick={() => setModalOpen(true)}>
-            <Plus size={16} />
-            New travel
-          </Button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate('/settings')}
+              className="flex items-center justify-center rounded-lg p-2 text-slate-400 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+              title="Settings"
+            >
+              <Settings size={18} />
+            </button>
+            <Button onClick={() => setModalOpen(true)}>
+              <Plus size={16} />
+              New travel
+            </Button>
+          </div>
         </div>
       </header>
 
